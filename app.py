@@ -1,5 +1,6 @@
 import time
 import psutil
+import pyspeedtest
 import speedtest
 import socket
 import requests
@@ -30,27 +31,28 @@ def speed_test():
     
     test = speedtest.Speedtest()
     
-    print("Loading server list...")
+    print("Loading Server List...")
     test.get_servers()
     
-    print("Find your server...")
+    print("Find Best Server for Test...")
     best = test.get_best_server()
     
     print(f"Name: {best['name']} - Host: {best['host']} - Country: {best['country']}({best['cc']}) - Latency: {best['latency']}")
     
-    print("Download test speed..")
+    print("Test Download Speed..")
     download_result = (test.download()) / 1024**2
     print(f"Download speed: {download_result:.3f} Mbit/s")
     
-    print("Upload test speed..")
+    print("Test Upload Speed..")
     upload_result = (test.upload()) / 1024**2
     print(f"Upload speed: {upload_result:.3f} Mbit/s")
 
     
 def ping():
-    test = speedtest.Speedtest()
-    test.get_best_server()
-    ping_test = test.results.ping
+    server = speedtest.Speedtest()
+    best = server.get_best_server()
+    test = pyspeedtest.SpeedTest(f"{best['host']}")
+    ping_test = test.ping()
     ping_result = print(f"Ping: {ping_test:.2f} ms")
     return ping_result
      
@@ -63,9 +65,14 @@ def usage():
     return status_2
 
 
-def route_ip():
-    route_address = socket.gethostbyname(socket.gethostname())
-    return route_address
+def dev_name():
+    device_name = socket.gethostname()
+    return device_name
+
+
+def dev_ip():
+    dev_address = socket.gethostbyname(socket.gethostname())
+    return dev_address
 
 
 def get_ip():
