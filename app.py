@@ -1,4 +1,3 @@
-import os
 import time
 import psutil
 import speedtest
@@ -54,6 +53,16 @@ def speed_test():
     print(f"Ping: {ping_result:.3f} ms")
     
     
+def usage():
+    while True:
+        cpu_usage = psutil.cpu_percent()
+        memory_usage = psutil.virtual_memory().percent
+        status_2 = print (f"CPU: {cpu_usage}% - Memory: {memory_usage}%") 
+        time.sleep(1)
+        return status_2
+
 if __name__ == "__main__":
     while True:
         bandwidth()
+        usage()
+        
