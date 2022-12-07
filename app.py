@@ -15,10 +15,13 @@ def bandwidth():
         download_byte = psutil.net_io_counters().bytes_recv
         upload_byte = psutil.net_io_counters().bytes_sent
         
-        MB_download = (download_byte - download_band) / 1024**2
-        MB_upload = (upload_byte - upload_band) / 1024**2
+        mb_download = (download_byte - download_band) / 1024**2
+        mb_upload = (upload_byte - upload_band) / 1024**2
         
-        status = print (f"Download: {MB_download:.3f} MB - Upload: {MB_upload:.3f} MB")
+        status ={
+                "Download": f"{mb_download:.3f}",
+                "Upload": f"{mb_upload:.3f}"
+                }
         
         download_band = download_byte
         upload_band = upload_byte
@@ -31,21 +34,27 @@ def speed_test():
     
     test = speedtest.Speedtest()
     
-    print("Loading Server List...")
+    # Loading Server List...
     test.get_servers()
     
-    print("Find Best Server for Test...")
+    # Find Best Server for Test...
     best = test.get_best_server()
     
-    print(f"Name: {best['name']} - Host: {best['host']} - Country: {best['country']}({best['cc']}) - Latency: {best['latency']}")
+    server_info = {"Name": f"{best['name']}",
+                   "Host": f"{best['host']}",
+                   "Country": f"{best['country']}({best['cc']})",
+                   "Latency": f"{best['latency']}"
+                   }
     
-    print("Test Download Speed..")
+    # Test Download Speed...
     download_result = (test.download()) / 1024**2
-    print(f"Download speed: {download_result:.3f} Mbit/s")
+    download_speed = {"Download_speed": f"{download_result:.2f}"}
     
-    print("Test Upload Speed..")
+    # Test Upload Speed..
     upload_result = (test.upload()) / 1024**2
-    print(f"Upload speed: {upload_result:.3f} Mbit/s")
+    upload_speed = {"Upload_speed": f"{upload_result:.2f}"} 
+    
+    return server_info, download_speed, upload_speed
 
     
 def ping():
@@ -53,14 +62,17 @@ def ping():
     best = server.get_best_server()
     test = pyspeedtest.SpeedTest(f"{best['host']}")
     ping_test = test.ping()
-    ping_result = print(f"Ping: {ping_test:.2f} ms")
+    ping_result = {"Ping": f"{ping_test:.2f}"}
     return ping_result
      
     
 def usage():
     cpu_usage = psutil.cpu_percent()
     memory_usage = psutil.virtual_memory().percent
-    status_2 = print (f"CPU: {cpu_usage}% - Memory: {memory_usage}%") 
+    status_2 = {
+                "CPU": f"{cpu_usage}",
+                "Memory": f"{memory_usage}"
+                }
     time.sleep(1)
     return status_2
 
@@ -81,10 +93,8 @@ def get_ip():
 
 
 
-
 if __name__ == "__main__":
     while True:
         bandwidth()
         usage()
-        
         
